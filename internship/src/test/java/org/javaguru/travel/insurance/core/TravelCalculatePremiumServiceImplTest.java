@@ -15,13 +15,9 @@ class TravelCalculatePremiumServiceImplTest {
     private TravelCalculatePremiumServiceImpl service = new TravelCalculatePremiumServiceImpl();
     @Test
     public void shouldPopulateResponse() {
-        TravelCalculatePremiumRequest request = new TravelCalculatePremiumRequest();
-        request.setPersonFirstName("John");
-        request.setPersonLastName("Peterson");
-        request.setAgreementDateFrom(new Date());
-        request.setAgreementDateTo(new Date());
+        var request = createRequestWithAllFields();
 
-        TravelCalculatePremiumResponse response = service.calculatePremium(request);
+        var response = service.calculatePremium(request);
 
         assertEquals(response.getPersonFirstName(), request.getPersonFirstName());
         assertEquals(response.getPersonLastName(), request.getPersonLastName());
@@ -31,41 +27,46 @@ class TravelCalculatePremiumServiceImplTest {
 
     @Test
     public void shouldPopulateFirstName() {
-        TravelCalculatePremiumRequest request = new TravelCalculatePremiumRequest();
-        request.setPersonFirstName("John");
-        TravelCalculatePremiumResponse response = service.calculatePremium(request);
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
         assertEquals(response.getPersonFirstName(), request.getPersonFirstName());
     }
 
     @Test
     public void shouldPopulateLastName() {
-        TravelCalculatePremiumRequest request = new TravelCalculatePremiumRequest();
-        request.setPersonLastName("Peterson");
-        TravelCalculatePremiumResponse response = service.calculatePremium(request);
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
         assertEquals(response.getPersonLastName(), request.getPersonLastName());
     }
 
     @Test
     public void shouldPopulateDateFrom() {
-        TravelCalculatePremiumRequest request = new TravelCalculatePremiumRequest();
-        request.setAgreementDateFrom(new Date());
-        TravelCalculatePremiumResponse response = service.calculatePremium(request);
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
         assertEquals(response.getAgreementDateFrom(), request.getAgreementDateFrom());
     }
 
     @Test
     public void shouldPopulateDateTo() {
-        TravelCalculatePremiumRequest request = new TravelCalculatePremiumRequest();
-        request.setAgreementDateTo(new Date());
-        TravelCalculatePremiumResponse response = service.calculatePremium(request);
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
         assertEquals(response.getAgreementDateTo(), request.getAgreementDateTo());
     }
 
     @Test
     public void shouldCalculateDaysBeetween() {
-        TravelCalculatePremiumResponse response = new TravelCalculatePremiumResponse();
-        response.setAgreementDateFrom(new Date(2004, Calendar.JUNE, 30));
-        response.setAgreementDateTo(new Date(2025, Calendar.JUNE, 30));
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
+
         assertEquals(BigDecimal.valueOf(7670), response.getAgreementPrice());
+    }
+
+    private TravelCalculatePremiumRequest createRequestWithAllFields() {
+        var request = new TravelCalculatePremiumRequest();
+        request.setPersonFirstName("John");
+        request.setPersonLastName("Peterson");
+        request.setAgreementDateFrom(new Date(2004, Calendar.JUNE, 30));
+        request.setAgreementDateTo(new Date(2025, Calendar.JUNE, 30));
+        return request;
     }
 }

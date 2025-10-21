@@ -25,13 +25,17 @@ class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService
     }
 
     private BigDecimal calculateAgreementPrice(TravelCalculatePremiumRequest request) {
-        LocalDate start = request.getAgreementDateFrom().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate end = request.getAgreementDateTo().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        try {
+            LocalDate start = request.getAgreementDateFrom().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate end = request.getAgreementDateTo().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
 
-        return BigDecimal.valueOf(ChronoUnit.DAYS.between(start, end));
+            return BigDecimal.valueOf(ChronoUnit.DAYS.between(start, end));
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 }
