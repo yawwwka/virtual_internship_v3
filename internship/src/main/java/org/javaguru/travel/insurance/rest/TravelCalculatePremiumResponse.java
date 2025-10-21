@@ -1,9 +1,6 @@
 package org.javaguru.travel.insurance.rest;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class TravelCalculatePremiumResponse {
@@ -17,59 +14,51 @@ public class TravelCalculatePremiumResponse {
     public TravelCalculatePremiumResponse() {
     }
 
-    public TravelCalculatePremiumResponse(String personFirstName, String personLastName, Date agreementDateFrom, Date agreementDateTo) {
+    public TravelCalculatePremiumResponse(String personFirstName, String personLastName, Date agreementDateFrom, Date agreementDateTo, BigDecimal agreementPrice) {
         this.personFirstName = personFirstName;
         this.personLastName = personLastName;
         this.agreementDateFrom = agreementDateFrom;
         this.agreementDateTo = agreementDateTo;
-
-        setAgreementPrice();
-    }
-
-    public void setPersonFirstName(String personFirstName) {
-        this.personFirstName = personFirstName;
-    }
-
-    public void setPersonLastName(String personLastName) {
-        this.personLastName = personLastName;
-    }
-
-    public void setAgreementDateFrom(Date agreementDateFrom) {
-        this.agreementDateFrom = agreementDateFrom;
-        setAgreementPrice();
-    }
-
-    public void setAgreementDateTo(Date agreementDateTo) {
-        this.agreementDateTo = agreementDateTo;
-        setAgreementPrice();
+        this.agreementPrice = agreementPrice;
     }
 
     public String getPersonFirstName() {
         return personFirstName;
     }
 
+    public void setPersonFirstName(String personFirstName) {
+        this.personFirstName = personFirstName;
+    }
+
     public String getPersonLastName() {
         return personLastName;
+    }
+
+    public void setPersonLastName(String personLastName) {
+        this.personLastName = personLastName;
     }
 
     public Date getAgreementDateFrom() {
         return agreementDateFrom;
     }
 
+    public void setAgreementDateFrom(Date agreementDateFrom) {
+        this.agreementDateFrom = agreementDateFrom;
+    }
+
     public Date getAgreementDateTo() {
         return agreementDateTo;
     }
 
-    private void setAgreementPrice() {
-        if (agreementDateTo != null && agreementDateFrom != null) {
-            LocalDate startDate = agreementDateFrom.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate endDate = agreementDateTo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-            agreementPrice = BigDecimal.valueOf(ChronoUnit.DAYS.between(startDate, endDate));
-        }
+    public void setAgreementDateTo(Date agreementDateTo) {
+        this.agreementDateTo = agreementDateTo;
     }
 
     public BigDecimal getAgreementPrice() {
         return agreementPrice;
+    }
+
+    public void setAgreementPrice(BigDecimal agreementPrice) {
+        this.agreementPrice = agreementPrice;
     }
 }
