@@ -4,6 +4,8 @@ import org.javaguru.travel.insurance.rest.TravelCalculatePremiumRequest;
 import org.javaguru.travel.insurance.rest.TravelCalculatePremiumResponse;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,5 +59,13 @@ class TravelCalculatePremiumServiceImplTest {
         request.setAgreementDateTo(new Date());
         TravelCalculatePremiumResponse response = service.calculatePremium(request);
         assertEquals(response.getAgreementDateTo(), request.getAgreementDateTo());
+    }
+
+    @Test
+    public void shouldCalculateDaysBeetween() {
+        TravelCalculatePremiumResponse response = new TravelCalculatePremiumResponse();
+        response.setAgreementDateFrom(new Date(2004, Calendar.JUNE, 30));
+        response.setAgreementDateTo(new Date(2025, Calendar.JUNE, 30));
+        assertEquals(BigDecimal.valueOf(7670), response.getAgreementPrice());
     }
 }
