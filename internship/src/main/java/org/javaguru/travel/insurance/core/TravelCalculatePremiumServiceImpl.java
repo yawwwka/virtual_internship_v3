@@ -12,6 +12,12 @@ import java.time.temporal.ChronoUnit;
 @Component
 class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService {
 
+    private DateTimeService dateTimeService;
+
+    public TravelCalculatePremiumServiceImpl(DateTimeService dateTimeService) {
+        this.dateTimeService = dateTimeService;
+    }
+
     @Override
     public TravelCalculatePremiumResponse calculatePremium(TravelCalculatePremiumRequest request) {
         TravelCalculatePremiumResponse response = new TravelCalculatePremiumResponse();
@@ -19,23 +25,10 @@ class TravelCalculatePremiumServiceImpl implements TravelCalculatePremiumService
         response.setPersonLastName(request.getPersonLastName());
         response.setAgreementDateFrom(request.getAgreementDateFrom());
         response.setAgreementDateTo(request.getAgreementDateTo());
-        response.setAgreementPrice(calculateAgreementPrice(request));
+
+        var daysBeetween = dateTimeService.getDaysBetween(response.getAgreementDateFrom(), response.getAgreementDateTo());
+        response.setAgreementPrice(BigDecimal.valueOf(daysBeetween));
 
         return response;
-    }
-
-    private BigDecimal calculateAgreementPrice(TravelCalculatePremiumRequest request) {
-        try {
-            LocalDate start = request.getAgreementDateFrom().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            LocalDate end = request.getAgreementDateTo().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-
-            return BigDecimal.valueOf(ChronoUnit.DAYS.between(start, end));
-        } catch (NullPointerException e) {
-            return null;
-        }
     }
 }

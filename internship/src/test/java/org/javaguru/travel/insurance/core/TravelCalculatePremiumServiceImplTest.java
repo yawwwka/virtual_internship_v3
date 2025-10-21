@@ -2,6 +2,7 @@ package org.javaguru.travel.insurance.core;
 
 import org.javaguru.travel.insurance.rest.TravelCalculatePremiumRequest;
 import org.javaguru.travel.insurance.rest.TravelCalculatePremiumResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -12,7 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TravelCalculatePremiumServiceImplTest {
 
-    private TravelCalculatePremiumServiceImpl service = new TravelCalculatePremiumServiceImpl();
+    private DateTimeService dateTimeService;
+    private TravelCalculatePremiumServiceImpl service;
+
+    @BeforeEach
+    public void setUp() {
+        dateTimeService = new DateTimeService();
+        service = new TravelCalculatePremiumServiceImpl(dateTimeService);
+    }
+
     @Test
     public void shouldPopulateResponse() {
         var request = createRequestWithAllFields();
@@ -59,6 +68,16 @@ class TravelCalculatePremiumServiceImplTest {
         var response = service.calculatePremium(request);
 
         assertEquals(BigDecimal.valueOf(7670), response.getAgreementPrice());
+    }
+
+    @Test
+    public void shouldWorkDateTimeService() {
+        var request = createRequestWithAllFields();
+        var response = service.calculatePremium(request);
+
+        DateTimeService dateTimeService = new DateTimeService();
+
+        assertEquals(7670, dateTimeService.getDaysBetween(response.getAgreementDateFrom(), response.getAgreementDateTo()));
     }
 
     private TravelCalculatePremiumRequest createRequestWithAllFields() {
